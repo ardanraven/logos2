@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Imagem com Logo</title>
+    <title>Combinador de Imagem com Logo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -23,43 +23,73 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Estilizando os radio buttons */
+        .radio-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border: 2px solid #4a5568;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        input[type="radio"]:checked + .radio-label {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-4">
 
     <div class="w-full max-w-4xl mx-auto">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-100">Max Carimbador</h1>
-            <p class="text-lg text-gray-400 mt-2">Carimbando logos igual um semi-deus</p>
+        <header class="text-center mb-6 md:mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-100">Max o Carimbador</h1>
+            <p class="text-lg text-gray-400 mt-2">Carimbando Logos igual um semi-deus desde 2025</p>
         </header>
 
         <main class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
-            <form id="generator-form" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <form id="generator-form" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <!-- Coluna de Inputs -->
                 <div class="space-y-6">
                     <div>
-                        <label for="prompt-input" class="block text-sm font-medium text-gray-300 mb-2">1. Descreva a imagem</label>
-                        <textarea id="prompt-input" rows="4" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Ex: um astronauta surfando em uma onda cósmica"></textarea>
-                    </div>
-                    <div>
-                        <label for="logo-input" class="block text-sm font-medium text-gray-300 mb-2">2. Envie seu logo (PNG)</label>
+                        <label for="base-image-input" class="block text-sm font-medium text-gray-300 mb-2">1. Envie a imagem de fundo</label>
                         <div class="flex items-center space-x-4">
-                            <input type="file" id="logo-input" accept="image/png" class="hidden">
-                            <label for="logo-input" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                            <input type="file" id="base-image-input" accept="image/*" class="hidden">
+                            <label for="base-image-input" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
                                 Escolher Arquivo
                             </label>
-                            <span id="logo-filename" class="text-gray-400 text-sm truncate">Nenhum arquivo selecionado</span>
+                            <span id="base-image-filename" class="text-gray-400 text-sm truncate">Nenhum arquivo selecionado</span>
+                        </div>
+                    </div>
+                    
+                    <!-- NOVA SEÇÃO DE ESCOLHA DE LOGO -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">2. Escolha o logo</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <input type="radio" name="logo-choice" id="logo-white" value="URL_DO_SEU_LOGO_BRANCO.png" class="hidden">
+                                <label for="logo-white" class="radio-label justify-center">
+                                    <span>Branco</span>
+                                </label>
+                            </div>
+                             <div>
+                                <input type="radio" name="logo-choice" id="logo-gold" value="URL_DO_SEU_LOGO_DOURADO.png" class="hidden">
+                                <label for="logo-gold" class="radio-label justify-center">
+                                    <span>Dourado</span>
+                                </label>
+                            </div>
                         </div>
                          <div id="logo-preview-container" class="mt-4 hidden">
-                            <p class="text-sm font-medium text-gray-300 mb-2">Pré-visualização do Logo:</p>
-                            <div class="bg-gray-700/50 p-2 rounded-lg inline-block border border-gray-600">
+                            <p class="text-sm font-medium text-gray-300 mb-2">Logo selecionado:</p>
+                            <div id="logo-preview-bg" class="bg-gray-700/50 p-2 rounded-lg inline-block border border-gray-600">
                                 <img id="logo-preview" src="" alt="Pré-visualização do Logo" class="max-h-24 rounded">
                             </div>
                         </div>
                     </div>
+                    
                     <button type="submit" id="generate-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 flex items-center justify-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <span>Gerar Imagem</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0v2m6-2v2m6-2v2M7 7h10m-5 5h.01"></path></svg>
+                        <span>Combinar Imagens</span>
                     </button>
                 </div>
                 
@@ -71,7 +101,7 @@
                             <p>Sua imagem final aparecerá aqui</p>
                         </div>
                         <div id="loader" class="loader ease-linear rounded-full border-4 border-t-4 border-gray-500 h-12 w-12 hidden"></div>
-                        <p id="loading-text" class="text-gray-400 mt-4 hidden">Gerando sua obra de arte... Isso pode levar um momento.</p>
+                        <p id="loading-text" class="text-gray-400 mt-4 hidden">Processando...</p>
                         <canvas id="result-canvas" class="hidden rounded-lg max-w-full max-h-full"></canvas>
                         <div id="error-message" class="text-red-400 text-center hidden"></div>
                     </div>
@@ -86,15 +116,26 @@
     </div>
 
     <script>
+        // ATENÇÃO: Cole os URLs dos seus logos aqui!
+        // Certifique-se de que são os links diretos para a imagem (geralmente terminam em .png)
+        const logoUrls = {
+            white: "https://i.ibb.co/Mkw2MxJV/1.png", // URL do logo branco atualizado
+            gold: "https://i.ibb.co/mrnbZrdT/2.png" // URL do logo dourado atualizado
+        };
+
+        // --- ATUALIZE OS VALORES DOS INPUTS COM OS URLS ---
+        document.getElementById('logo-white').value = logoUrls.white;
+        document.getElementById('logo-gold').value = logoUrls.gold;
+        
         // Elementos do DOM
         const form = document.getElementById('generator-form');
-        const promptInput = document.getElementById('prompt-input');
-        const logoInput = document.getElementById('logo-input');
-        const logoFilename = document.getElementById('logo-filename');
+        const baseImageInput = document.getElementById('base-image-input');
+        const baseImageFilename = document.getElementById('base-image-filename');
+        const logoChoiceRadios = document.querySelectorAll('input[name="logo-choice"]');
         const logoPreviewContainer = document.getElementById('logo-preview-container');
         const logoPreview = document.getElementById('logo-preview');
+        const logoPreviewBg = document.getElementById('logo-preview-bg');
         const generateBtn = document.getElementById('generate-btn');
-        const outputContainer = document.getElementById('output-container');
         const placeholderText = document.getElementById('placeholder-text');
         const loader = document.getElementById('loader');
         const loadingText = document.getElementById('loading-text');
@@ -102,33 +143,47 @@
         const errorMessage = document.getElementById('error-message');
         const downloadBtn = document.getElementById('download-btn');
 
-        let logoDataUrl = null;
+        let baseImageDataUrl = null;
+        let selectedLogoUrl = null;
 
         // --- MANIPULADORES DE EVENTOS ---
 
-        // Atualiza a UI quando um logo é selecionado
-        logoInput.addEventListener('change', (event) => {
+        // Atualiza a UI quando a imagem de fundo é selecionada
+        baseImageInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
-            if (file && file.type === "image/png") {
-                logoFilename.textContent = file.name;
+            if (file) {
+                baseImageFilename.textContent = file.name;
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    logoDataUrl = e.target.result;
-                    logoPreview.src = logoDataUrl;
-                    logoPreviewContainer.classList.remove('hidden');
+                    baseImageDataUrl = e.target.result;
                 };
                 reader.readAsDataURL(file);
             } else {
-                logoDataUrl = null;
-                logoFilename.textContent = 'Por favor, selecione um PNG.';
-                logoPreviewContainer.classList.add('hidden');
+                baseImageDataUrl = null;
+                baseImageFilename.textContent = 'Nenhum arquivo selecionado';
             }
+        });
+        
+        // Atualiza a UI quando um logo é escolhido
+        logoChoiceRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                selectedLogoUrl = event.target.value;
+                logoPreview.src = selectedLogoUrl;
+                logoPreviewContainer.classList.remove('hidden');
+
+                // Ajusta o fundo da pré-visualização para melhor contraste
+                if (event.target.id === 'logo-white') {
+                    logoPreviewBg.style.backgroundColor = '#1f2937'; // Fundo escuro para logo branco
+                } else {
+                    logoPreviewBg.style.backgroundColor = '#d1d5db'; // Fundo claro para logo dourado
+                }
+            });
         });
 
         // Manipula o envio do formulário
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            await generateAndComposeImage();
+            await composeImages();
         });
 
         // Manipula o clique no botão de download
@@ -141,90 +196,31 @@
 
         // --- FUNÇÕES PRINCIPAIS ---
 
-        /**
-         * Orquestra a geração e composição da imagem.
-         */
-        async function generateAndComposeImage() {
-            const prompt = promptInput.value.trim();
-            if (!prompt || !logoDataUrl) {
-                displayError('Por favor, forneça uma descrição e um arquivo de logo.');
+        async function composeImages() {
+            if (!baseImageDataUrl || !selectedLogoUrl) {
+                displayError('Por favor, envie a imagem de fundo e escolha um logo.');
                 return;
             }
-
             setLoadingState(true);
-
             try {
-                const fullPrompt = `${prompt}, hiper realista, 8k, hiper detalhado`;
-                const generatedImageBase64 = await callImageGenerationAPI(fullPrompt);
-                await drawImagesOnCanvas(generatedImageBase64, logoDataUrl);
+                await new Promise(res => setTimeout(res, 50));
+                await drawImagesOnCanvas(baseImageDataUrl, selectedLogoUrl);
                 setLoadingState(false, true);
             } catch (error) {
-                console.error('Falha na geração da imagem:', error);
-                displayError('Não foi possível gerar a imagem. Tente novamente.');
+                console.error('Falha na composição da imagem:', error);
+                displayError('Não foi possível processar as imagens. Verifique os links dos logos e tente novamente.');
                 setLoadingState(false);
             }
         }
         
-        /**
-         * Chama a API de geração de imagem com retentativas (exponential backoff).
-         * @param {string} prompt O prompt para a IA.
-         * @returns {Promise<string>} A imagem gerada em base64.
-         */
-        async function callImageGenerationAPI(prompt) {
-             // ATENÇÃO: Cole sua chave de API do Google AI Studio aqui.
-             // IMPORTANTE: Não suba este arquivo para um repositório PÚBLICO no GitHub com sua chave preenchida.
-             // Qualquer pessoa poderá ver e usar sua chave, gerando custos na sua conta.
-             // Mantenha seu repositório PRIVADO se for colocar a chave aqui.
-             const apiKey = "AIzaSyDlXkGIMOeQuf3ZZ9vOqOHHRG05usqOayg";
-             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
-
-            const payload = {
-                instances: [{ prompt: prompt }],
-                parameters: { "sampleCount": 1 }
-            };
-
-            let attempts = 0;
-            const maxAttempts = 5;
-            while (attempts < maxAttempts) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    if (result.predictions && result.predictions[0]?.bytesBase64Encoded) {
-                        return result.predictions[0].bytesBase64Encoded;
-                    } else {
-                        throw new Error('Resposta da API inválida');
-                    }
-                } catch (error) {
-                    attempts++;
-                    if (attempts >= maxAttempts) {
-                        throw error;
-                    }
-                    const delay = Math.pow(2, attempts) * 100;
-                    await new Promise(res => setTimeout(res, delay));
-                }
-            }
-        }
-        
-        /**
-         * Desenha a imagem base e o logo em um canvas.
-         * @param {string} baseImageBase64 Imagem de fundo em base64.
-         * @param {string} logoDataUrl URL de dados do logo.
-         * @returns {Promise<void>}
-         */
-        function drawImagesOnCanvas(baseImageBase64, logoDataUrl) {
+        function drawImagesOnCanvas(baseDataUrl, logoUrl) {
             return new Promise((resolve, reject) => {
                 const ctx = resultCanvas.getContext('2d');
                 const baseImg = new Image();
                 const logoImg = new Image();
+                
+                // IMPORTANTE: Necessário para carregar imagens de outros domínios (como o ImageBB) no canvas
+                logoImg.crossOrigin = "anonymous";
                 
                 let loadedImages = 0;
                 const totalImages = 2;
@@ -232,44 +228,32 @@
                 const onImageLoad = () => {
                     loadedImages++;
                     if (loadedImages === totalImages) {
-                        // Define o tamanho do canvas com base na imagem gerada
                         resultCanvas.width = baseImg.naturalWidth;
                         resultCanvas.height = baseImg.naturalHeight;
-
-                        // Desenha a imagem base
                         ctx.drawImage(baseImg, 0, 0);
 
-                        // --- ALTERAÇÃO AQUI: Redimensionar o logo ---
+                        // --- LÓGICA DE ESCALONAMENTO ATUALIZADA ---
+                        // Define a proporção que a maior dimensão do logo deve ter em relação à menor dimensão da imagem de fundo.
+                        // Exemplo: 0.75 significa que o lado maior do logo terá 75% do tamanho do lado menor da imagem.
+                        const desiredLogoScale = 0.75;
 
-                        // Define a proporção máxima que o logo pode ocupar (ex: 50%)
-                        const maxLogoScale = 0.50; 
-                        
-                        // Calcula a dimensão máxima baseada na menor dimensão da imagem principal
-                        const maxDimension = Math.min(resultCanvas.width, resultCanvas.height) * maxLogoScale;
+                        const baseMinDimension = Math.min(resultCanvas.width, resultCanvas.height);
+                        const logoAspectRatio = logoImg.naturalWidth / logoImg.naturalHeight;
 
-                        let logoWidth = logoImg.naturalWidth;
-                        let logoHeight = logoImg.naturalHeight;
+                        let logoWidth, logoHeight;
 
-                        // Verifica se o logo precisa ser redimensionado para caber na dimensão máxima
-                        if (logoWidth > maxDimension || logoHeight > maxDimension) {
-                            if (logoWidth > logoHeight) {
-                                // Se for mais largo (paisagem)
-                                const ratio = maxDimension / logoWidth;
-                                logoWidth = maxDimension;
-                                logoHeight = logoHeight * ratio;
-                            } else {
-                                // Se for mais alto (retrato) ou quadrado
-                                const ratio = maxDimension / logoHeight;
-                                logoHeight = maxDimension;
-                                logoWidth = logoWidth * ratio;
-                            }
+                        // Calcula as novas dimensões do logo mantendo sua proporção
+                        if (logoAspectRatio >= 1) { // Se o logo for mais largo que alto
+                            logoWidth = baseMinDimension * desiredLogoScale;
+                            logoHeight = logoWidth / logoAspectRatio;
+                        } else { // Se o logo for mais alto que largo
+                            logoHeight = baseMinDimension * desiredLogoScale;
+                            logoWidth = logoHeight * logoAspectRatio;
                         }
 
-                        // Calcula a posição central para o logo já redimensionado
                         const logoX = (resultCanvas.width - logoWidth) / 2;
                         const logoY = (resultCanvas.height - logoHeight) / 2;
                         
-                        // Desenha o logo sobre a imagem base com o novo tamanho
                         ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
                         resolve();
                     }
@@ -277,23 +261,18 @@
 
                 baseImg.onload = onImageLoad;
                 logoImg.onload = onImageLoad;
-
                 baseImg.onerror = () => reject(new Error('Falha ao carregar a imagem base.'));
-                logoImg.onerror = () => reject(new Error('Falha ao carregar o logo.'));
+                logoImg.onerror = () => reject(new Error('Falha ao carregar o logo a partir da URL. Verifique o link.'));
 
-                baseImg.src = `data:image/png;base64,${baseImageBase64}`;
-                logoImg.src = logoDataUrl;
+                baseImg.src = baseDataUrl;
+                logoImg.src = logoUrl;
             });
         }
         
         // --- FUNÇÕES AUXILIARES DE UI ---
 
-        /**
-         * Controla o estado de carregamento da UI.
-         * @param {boolean} isLoading - Se deve mostrar o loader.
-         * @param {boolean} [isSuccess=false] - Se a operação foi bem-sucedida.
-         */
         function setLoadingState(isLoading, isSuccess = false) {
+            // ... (código auxiliar sem alterações)
             if (isLoading) {
                 generateBtn.disabled = true;
                 generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -317,18 +296,15 @@
             }
         }
         
-        /**
-         * Exibe uma mensagem de erro na UI.
-         * @param {string} message - A mensagem a ser exibida.
-         */
         function displayError(message) {
             errorMessage.textContent = message;
             errorMessage.classList.remove('hidden');
+            setTimeout(() => {
+                errorMessage.classList.add('hidden');
+            }, 5000);
         }
 
     </script>
 </body>
 </html>
-
-
 
